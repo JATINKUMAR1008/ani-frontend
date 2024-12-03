@@ -1,4 +1,4 @@
-import { redirect, useNavigate, useRouter } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 import { Navbar } from "../navbar/navbar";
 import { BreadcrumbHeader } from "../anime";
 import { useQuery } from "@tanstack/react-query";
@@ -28,11 +28,8 @@ interface ApiResponse {
 
 export const WatchPage = ({ animeId, ep }: IProps) => {
   const path = useRouter().state.location.pathname.split("/");
-  const navigation = useNavigate();
   const {
     data: EpisodesData,
-    isLoading: EpisodeLoading,
-    error: EpisodeFetcgError,
   } = useQuery<ApiResponseEpisodes>({
     queryKey: [`episodes-${animeId}`],
     queryFn: async () => {
@@ -41,7 +38,7 @@ export const WatchPage = ({ animeId, ep }: IProps) => {
       ).then((res) => res.json());
     },
   });
-  const { data, isLoading, error, refetch } = useQuery<ApiResponse>({
+  const { data } = useQuery<ApiResponse>({
     queryKey: ["watch", animeId, ep],
     queryFn: async () => {
       return await fetch(

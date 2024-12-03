@@ -10,6 +10,7 @@ import {
   BreadcrumbSeparator,
 } from "../ui/breadcrumb";
 import { AnimeInfo } from "./_components/anime-info";
+import { Loader } from "../Loader";
 
 interface IProps {
   animeName: string;
@@ -36,31 +37,29 @@ const Anime = ({ animeName }: IProps) => {
   const path = useRouter().state.location.pathname.split("/");
   console.log(path);
   return (
-    data && (
-      <div className="w-screen h-screen">
-        <Navbar />
-        <div className="w-full flex p-4">
-          <Breadcrumb>
-            <BreadcrumbList>
-              {path.map((item, index) => (
-                <>
-                  <BreadcrumbItem key={index}>
-                    <BreadcrumbLink
-                      href={`/${item}`}
-                      className="max-w-[300px] truncate whitespace-nowrap"
-                    >
-                      {item === "" ? "Home" : item}
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                </>
-              ))}
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div>
-        <AnimeInfo animeInfo={data.data} />
+    <div className="w-screen h-screen">
+      <Navbar />
+      <div className="w-full flex p-4">
+        <Breadcrumb>
+          <BreadcrumbList>
+            {path.map((item, index) => (
+              <>
+                <BreadcrumbItem key={index}>
+                  <BreadcrumbLink
+                    href={`/${item}`}
+                    className="max-w-[300px] truncate whitespace-nowrap"
+                  >
+                    {item === "" ? "Home" : item}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+              </>
+            ))}
+          </BreadcrumbList>
+        </Breadcrumb>
       </div>
-    )
+      {data ? <AnimeInfo animeInfo={data.data} /> : <Loader />}
+    </div>
   );
 };
 

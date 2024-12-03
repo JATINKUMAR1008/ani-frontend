@@ -6,6 +6,7 @@ import { EpisodesList } from "../home/_components/episodes";
 import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { Loader } from "../Loader";
 
 interface ApiResponse {
   status: boolean;
@@ -36,9 +37,9 @@ export const EpisodesGrid = ({
   }, [data]);
   console.log(data);
   return (
-    data && (
-      <div className="w-screen h-screen">
-        <Navbar />
+    <div className="w-screen h-screen">
+      <Navbar />
+      {data ? (
         <div className="max-w-[1440px] mx-auto w-full">
           <EpisodesList
             episodes={data?.data.animes}
@@ -54,8 +55,10 @@ export const EpisodesGrid = ({
             />
           </div>
         </div>
-      </div>
-    )
+      ) : (
+        <Loader />
+      )}
+    </div>
   );
 };
 

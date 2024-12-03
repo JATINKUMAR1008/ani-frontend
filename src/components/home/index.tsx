@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { HiAnime } from "@/types/anime";
 import { Trending } from "./_components/trending";
 import { EpisodesList } from "./_components/episodes";
+import { Loader } from "../Loader";
 
 interface ApiData {
   data: HiAnime.ScrapedHomePage;
@@ -15,18 +16,20 @@ export const HomePage = () => {
   const { data } = useQuery<ApiData>({
     queryKey: ["home-data"],
     queryFn: async () => {
-      return (await fetch(`${import.meta.env.VITE_API_URL}/api/v2/hianime/home`)).json();
+      return (
+        await fetch(`${import.meta.env.VITE_API_URL}/api/v2/hianime/home`)
+      ).json();
     },
   });
   useEffect(() => {
     console.log(data);
   }, [data]);
   return (
-    data && (
-      <div className="w-screen  h-screen">
-        <header className="">
-          <Navbar />
-        </header>
+    <div className="w-screen  h-screen">
+      <header className="">
+        <Navbar />
+      </header>
+      {data ? (
         <main className="mt-3 max-w-[1440px] mx-auto">
           <PosterCarousel spotlights={data?.data.spotlightAnimes} />
           <Trending trendingData={data.data.trendingAnimes} />
@@ -54,7 +57,9 @@ export const HomePage = () => {
             />
           </div>
         </main>
-      </div>
-    )
+      ) : (
+        <Loader />
+      )}
+    </div>
   );
 };

@@ -28,7 +28,7 @@ const Anime = ({ animeName }: IProps) => {
     queryFn: async () => {
       return (
         await fetch(
-          `${process.env.VITE_API_URL}/api/v2/hianime/anime/${santizedName}`
+          `${import.meta.env.VITE_API_URL}/api/v2/hianime/anime/${santizedName}`
         )
       ).json();
     },

@@ -35,28 +35,11 @@ const Anime = ({ animeName }: IProps) => {
     },
   });
   const path = useRouter().state.location.pathname.split("/");
-  console.log(path);
   return (
     <div className="w-screen h-screen">
       <Navbar />
       <div className="w-full flex p-4">
-        <Breadcrumb>
-          <BreadcrumbList>
-            {path.map((item, index) => (
-              <>
-                <BreadcrumbItem key={index}>
-                  <BreadcrumbLink
-                    href={`/${item}`}
-                    className="max-w-[300px] truncate whitespace-nowrap"
-                  >
-                    {item === "" ? "Home" : item}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-              </>
-            ))}
-          </BreadcrumbList>
-        </Breadcrumb>
+        <BreadcrumbHeader path={path} />
       </div>
       {data && !isLoading ? (
         <AnimeInfo animeInfo={data.data} />
@@ -66,6 +49,28 @@ const Anime = ({ animeName }: IProps) => {
         !data && isLoading && <Loader />
       )}
     </div>
+  );
+};
+
+export const BreadcrumbHeader = ({ path }: { path: string[] }) => {
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        {path.map((item, index) => (
+          <>
+            <BreadcrumbItem key={index}>
+              <BreadcrumbLink
+                href={`/${item}`}
+                className="max-w-[300px] truncate whitespace-nowrap"
+              >
+                {item === "" ? "Home" : item}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+          </>
+        ))}
+      </BreadcrumbList>
+    </Breadcrumb>
   );
 };
 

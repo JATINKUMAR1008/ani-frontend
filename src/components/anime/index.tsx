@@ -28,7 +28,7 @@ const Anime = ({ animeName }: IProps) => {
     queryFn: async () => {
       return (
         await fetch(
-          `http://localhost:4000/api/v2/hianime/anime/${santizedName}`
+          `${process.env.NEXT_PUBLIC_API}/api/v2/hianime/anime/${santizedName}`
         )
       ).json();
     },

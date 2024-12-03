@@ -15,18 +15,18 @@ interface ApiResponse {
 export const EpisodesGrid = ({
   category,
   page,
-  title
+  title,
 }: {
   category: HiAnime.AnimeCategories;
   page: number;
-  title:string
+  title: string;
 }) => {
   const { data } = useQuery<ApiResponse>({
     queryKey: ["category", category, page],
     queryFn: async () => {
       return (
         await fetch(
-          `http://localhost:4000/api/v2/hianime/category/${category}?page=${page}`
+          `${process.env.NEXT_PUBLIC_API}/api/v2/hianime/category/${category}?page=${page}`
         )
       ).json();
     },

@@ -26,7 +26,7 @@ export const EpisodesGrid = ({
     queryFn: async () => {
       return (
         await fetch(
-          `${process.env.NEXT_PUBLIC_API}/api/v2/hianime/category/${category}?page=${page}`
+          `${process.env.VITE_API_URL}/api/v2/hianime/category/${category}?page=${page}`
         )
       ).json();
     },

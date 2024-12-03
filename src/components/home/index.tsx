@@ -15,7 +15,7 @@ export const HomePage = () => {
   const { data } = useQuery<ApiData>({
     queryKey: ["home-data"],
     queryFn: async () => {
-      return (await fetch(`${process.env.NEXT_PUBLIC_API}/api/v2/hianime/home`)).json();
+      return (await fetch(`${process.env.VITE_API_URL}/api/v2/hianime/home`)).json();
     },
   });
   useEffect(() => {

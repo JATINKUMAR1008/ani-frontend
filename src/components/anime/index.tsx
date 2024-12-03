@@ -1,7 +1,7 @@
 import { HiAnime } from "@/types/anime";
 import { useQuery } from "@tanstack/react-query";
 import { Navbar } from "../navbar/navbar";
-import { useRouter } from "@tanstack/react-router";
+import { ErrorComponent, useRouter } from "@tanstack/react-router";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -24,7 +24,7 @@ interface ApiData {
 const Anime = ({ animeName }: IProps) => {
   const santizedName = animeName.replace(/\s/g, "-").toLowerCase();
   console.log(santizedName);
-  const { data } = useQuery<ApiData>({
+  const { data, isLoading, error } = useQuery<ApiData>({
     queryKey: ["anime", animeName],
     queryFn: async () => {
       return (
@@ -58,7 +58,13 @@ const Anime = ({ animeName }: IProps) => {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      {data ? <AnimeInfo animeInfo={data.data} /> : <Loader />}
+      {data && !isLoading ? (
+        <AnimeInfo animeInfo={data.data} />
+      ) : !data && !isLoading ? (
+        <ErrorComponent error={error} />
+      ) : (
+        !data && isLoading && <Loader />
+      )}
     </div>
   );
 };

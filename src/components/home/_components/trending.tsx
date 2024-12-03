@@ -22,7 +22,7 @@ export const Trending = ({ trendingData }: IProps) => {
           </ScrollArea>
         </div>
       </div>
-      <Separator/>
+      <Separator />
     </div>
   );
 };
@@ -35,7 +35,7 @@ const PosterCard = ({ anime }: { anime: HiAnime.TrendingAnime }) => {
           {anime.rank}
         </div>
       </div>
-      <Link>
+      <Link href={`/${anime.id}`}>
         <img
           src={anime.poster || ""}
           alt={anime.name || ""}

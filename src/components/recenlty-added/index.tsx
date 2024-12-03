@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { EpisodesList } from "../home/_components/episodes";
 import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { ErrorComponent, Link } from "@tanstack/react-router";
 import { Loader } from "../Loader";
 
 interface ApiResponse {
@@ -22,7 +22,7 @@ export const EpisodesGrid = ({
   page: number;
   title: string;
 }) => {
-  const { data } = useQuery<ApiResponse>({
+  const { data, isLoading, error } = useQuery<ApiResponse>({
     queryKey: ["category", category, page],
     queryFn: async () => {
       return (
@@ -39,7 +39,7 @@ export const EpisodesGrid = ({
   return (
     <div className="w-screen h-screen">
       <Navbar />
-      {data ? (
+      {data && !isLoading ? (
         <div className="max-w-[1440px] mx-auto w-full">
           <EpisodesList
             episodes={data?.data.animes}
@@ -55,8 +55,10 @@ export const EpisodesGrid = ({
             />
           </div>
         </div>
+      ) : !data && !isLoading ? (
+        <ErrorComponent error={error} />
       ) : (
-        <Loader />
+        !data && isLoading && <Loader />
       )}
     </div>
   );

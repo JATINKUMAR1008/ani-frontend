@@ -6,6 +6,7 @@ import { HiAnime } from "@/types/anime";
 import { Trending } from "./_components/trending";
 import { EpisodesList } from "./_components/episodes";
 import { Loader } from "../Loader";
+import { ErrorComponent } from "@tanstack/react-router";
 
 interface ApiData {
   data: HiAnime.ScrapedHomePage;
@@ -13,7 +14,7 @@ interface ApiData {
 }
 
 export const HomePage = () => {
-  const { data } = useQuery<ApiData>({
+  const { data, isLoading, error } = useQuery<ApiData>({
     queryKey: ["home-data"],
     queryFn: async () => {
       return (
@@ -29,7 +30,7 @@ export const HomePage = () => {
       <header className="">
         <Navbar />
       </header>
-      {data ? (
+      {data && !isLoading ? (
         <main className="mt-3 max-w-[1440px] mx-auto">
           <PosterCarousel spotlights={data?.data.spotlightAnimes} />
           <Trending trendingData={data.data.trendingAnimes} />
@@ -57,8 +58,10 @@ export const HomePage = () => {
             />
           </div>
         </main>
+      ) : !data && !isLoading ? (
+        <ErrorComponent error={error} />
       ) : (
-        <Loader />
+        !data && isLoading && <Loader />
       )}
     </div>
   );

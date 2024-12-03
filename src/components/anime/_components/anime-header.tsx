@@ -23,17 +23,17 @@ export const AnimeBanner = ({
           className=" absolute inset-0 w-full h-full object-cover -z-20 "
         />
       </div>
-      <div className="w-full flex items-center justify-center h-full ">
-        <div className="flex w-full items-center h-full gap-2 max-w-[1200px]">
+      <div className="w-full flex flex-col sm:flex-row items-center justify-center h-full ">
+        <div className="flex flex-col sm:flex-row w-full items-center h-full gap-2 max-w-[1200px]">
           <div className="w-fit h-full md:basis-1/5">
             <img
               src={animeInfo.poster || ""}
               className="w-full h-full object-contain"
             />
           </div>
-          <div className="flex flex-col w-full basis-[60%] px-3">
-            <h1 className="md:text-2xl font-semibold">{animeInfo.name}</h1>
-            <p className="text-xs text-accent-foreground">
+          <div className="flex flex-col items-center sm:items-start w-full basis-[60%] px-3">
+            <h1 className="md:text-2xl font-semibold text-center sm:text-left">{animeInfo.name}</h1>
+            <p className="text-xs text-accent-foreground text-center sm:text-left">
               <Description description={animeInfo.description || ""} />
             </p>
             <div className="mt-2 flex my-4 gap-1 items-center">

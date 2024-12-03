@@ -45,7 +45,10 @@ const Anime = ({ animeName }: IProps) => {
               {path.map((item, index) => (
                 <>
                   <BreadcrumbItem key={index}>
-                    <BreadcrumbLink href={`/${item}`}>
+                    <BreadcrumbLink
+                      href={`/${item}`}
+                      className="max-w-[300px] truncate whitespace-nowrap"
+                    >
                       {item === "" ? "Home" : item}
                     </BreadcrumbLink>
                   </BreadcrumbItem>

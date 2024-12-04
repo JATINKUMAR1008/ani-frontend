@@ -19,7 +19,7 @@ interface IProps {
 }
 
 export const PosterCarousel = ({ spotlights }: IProps) => {
-  console.log("@SPOTS", spotlights);
+  // console.log("@SPOTS", spotlights);
   const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay()]);
   return (
     <div className="px-2">

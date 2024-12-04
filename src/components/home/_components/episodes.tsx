@@ -49,7 +49,7 @@ export const EpisodesList = ({
 };
 
 export const FilmItem = ({ anime }: { anime: HiAnime.Anime }) => {
-  console.log(anime);
+  // console.log(anime);
   return (
     <Link
       href={`/${anime.id}`}

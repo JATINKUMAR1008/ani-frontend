@@ -33,9 +33,8 @@ export const EpisodesGrid = ({
     },
   });
   useEffect(() => {
-    console.log(data);
+    console.log("@CATDATA", data);
   }, [data]);
-  console.log(data);
   return (
     <div className="w-screen h-screen">
       <Navbar />

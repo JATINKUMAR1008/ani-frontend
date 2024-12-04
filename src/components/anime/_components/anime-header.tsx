@@ -11,9 +11,11 @@ import { Link } from "@tanstack/react-router";
 export const AnimeBanner = ({
   animeInfo,
   moreInfo,
+  lastEp,
 }: {
   animeInfo: HiAnime.ScrapedAnimeAboutInfo["anime"]["info"];
   moreInfo?: HiAnime.ScrapedAnimeAboutInfo["anime"]["moreInfo"];
+  lastEp?: string;
 }) => {
   return (
     <div className={`w-full  p-4 relative bg-background/80`}>
@@ -32,7 +34,9 @@ export const AnimeBanner = ({
             />
           </div>
           <div className="flex flex-col items-center sm:items-start w-full basis-[60%] px-3">
-            <h1 className="md:text-2xl font-semibold text-center sm:text-left">{animeInfo.name}</h1>
+            <h1 className="md:text-2xl font-semibold text-center sm:text-left">
+              {animeInfo.name}
+            </h1>
             <p className="text-xs text-accent-foreground text-center sm:text-left">
               <Description description={animeInfo.description || ""} />
             </p>
@@ -59,7 +63,7 @@ export const AnimeBanner = ({
               </p>
             </div>
             <div className="flex items-center gap-2 mt-5">
-              <Link href={`/watch/${animeInfo.id}`}>
+              <Link href={`/watch/${lastEp}`}>
                 <Button variant={"outline"} className="flex items-center gap-2">
                   <PlayCircleIcon size={16} />
                   <span>Watch Now</span>

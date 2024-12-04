@@ -6,7 +6,7 @@ interface IProps {
   trendingData: HiAnime.ScrapedHomePage["trendingAnimes"];
 }
 export const Trending = ({ trendingData }: IProps) => {
-  console.log("@TRENDS", trendingData);
+  // console.log("@TRENDS", trendingData);
   return (
     <div className="w-full h-full">
       <div className="w-full h-full p-4">

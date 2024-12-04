@@ -1,4 +1,4 @@
-import { useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { Navbar } from "../navbar/navbar";
 import { BreadcrumbHeader } from "../anime";
 import { useQuery } from "@tanstack/react-query";
@@ -11,6 +11,8 @@ import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight, Mic, PlusIcon } from "lucide-react";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
+import { cn } from "@/lib/utils";
 interface IProps {
   animeId: string;
   ep: string;
@@ -28,9 +30,7 @@ interface ApiResponse {
 
 export const WatchPage = ({ animeId, ep }: IProps) => {
   const path = useRouter().state.location.pathname.split("/");
-  const {
-    data: EpisodesData,
-  } = useQuery<ApiResponseEpisodes>({
+  const { data: EpisodesData } = useQuery<ApiResponseEpisodes>({
     queryKey: [`episodes-${animeId}`],
     queryFn: async () => {
       return await fetch(
@@ -63,27 +63,45 @@ export const WatchPage = ({ animeId, ep }: IProps) => {
           <BreadcrumbHeader path={path} />
         </div>
         <PlayerProvider>
-          <div className="flex flex-col">
-            <VideoPlayer episodeId={`${animeId}?ep=${ep}`} />
-            <div className="flex flex-col md:flex-row items-center justify-between gap-1 py-3 px-4 border-y mt-1">
-              <AutoButtons />
-              <NavigationButtons />
+          <div className="flex flex-col-reverse md:flex-row md:justify-center">
+            <div className="w-full md:max-w-[400px]  border">
+              <header className="w-full h-[40px] flex items-center gap-4 p-2 border-b border-separate">
+                <h4 className="text-xs font-semibold basis-1/3">
+                  List of episodes
+                </h4>
+                <Input
+                  placeholder="Number of episode"
+                  className="h-[30px] text-xs basis-2/3"
+                />
+              </header>
+              <EpisodesList
+                episodes={EpisodesData?.data.episodes || []}
+                activeEpisode={`${animeId}?ep=${ep}`}
+              />
             </div>
-            <div className="mt-2 flex flex-col gap-1 items-center">
-              <h4 className="text-sm text-muted-foreground">
-                You are watching
-              </h4>
-              <p className="text-sm font-semibold">
-                Episode {data?.data.episodeNo}
-              </p>
-              <p className="text-muted-foreground text-xs">
-                if current server doesn't work please try other servers beside.
-              </p>
+            <div className="flex flex-col w-full max-w-[800px] border">
+              <VideoPlayer episodeId={`${animeId}?ep=${ep}`} />
+              <div className="flex flex-col md:flex-row items-center justify-between gap-1 py-3 px-4 border-y mt-1">
+                <AutoButtons />
+                <NavigationButtons />
+              </div>
+              <div className="mt-2 flex flex-col gap-1 items-center">
+                <h4 className="text-sm text-muted-foreground">
+                  You are watching
+                </h4>
+                <p className="text-sm font-semibold">
+                  Episode {data?.data.episodeNo}
+                </p>
+                <p className="text-muted-foreground text-xs">
+                  if current server doesn't work please try other servers
+                  beside.
+                </p>
+              </div>
+              <ServersSelector
+                subServers={data?.data.sub}
+                dubServers={data?.data.dub}
+              />
             </div>
-            <ServersSelector
-              subServers={data?.data.sub}
-              dubServers={data?.data.dub}
-            />
           </div>
         </PlayerProvider>
       </div>
@@ -235,6 +253,33 @@ const ServersSelector = ({
           ))}
         </div>
       </div>
+    </div>
+  );
+};
+
+const EpisodesList = ({
+  episodes,
+  activeEpisode,
+}: {
+  episodes: HiAnime.ScrapedAnimeEpisodes["episodes"];
+  activeEpisode?: string;
+}) => {
+  return (
+    <div className="flex flex-col w-full divide-y">
+      {episodes.map((episode) => (
+        <Link
+          href={`/watch/${episode.episodeId}`}
+          key={episode.episodeId}
+          className={cn(
+            "flex items-center gap-2 p-4 cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors duration-100",
+            episode.episodeId === activeEpisode &&
+              "bg-accent text-accent-foreground"
+          )}
+        >
+          <p className="text-xs font-semibold">{episode.number}.</p>
+          <p className="text-xs">{episode.title}</p>
+        </Link>
+      ))}
     </div>
   );
 };

@@ -11,6 +11,7 @@ import {
 } from "../ui/breadcrumb";
 import { AnimeInfo } from "./_components/anime-info";
 import { Loader } from "../Loader";
+import { useEffect, useState } from "react";
 
 interface IProps {
   animeName: string;
@@ -21,9 +22,14 @@ interface ApiData {
   status: boolean;
 }
 
+interface ApiResponseEpisodes {
+  status: boolean;
+  data: HiAnime.ScrapedAnimeEpisodes;
+}
+
 const Anime = ({ animeName }: IProps) => {
   const santizedName = animeName.replace(/\s/g, "-").toLowerCase();
-  console.log(santizedName);
+  const [latestEpId, setLatestEpId] = useState<string>("");
   const { data, isLoading, error } = useQuery<ApiData>({
     queryKey: ["anime", animeName],
     queryFn: async () => {
@@ -34,6 +40,23 @@ const Anime = ({ animeName }: IProps) => {
       ).json();
     },
   });
+
+  const { data: EpisodesData } = useQuery<ApiResponseEpisodes>({
+    queryKey: [`episodes-${santizedName}`],
+    queryFn: async () => {
+      return await fetch(
+        `${import.meta.env.VITE_API_URL}/api/v2/hianime/anime/${santizedName}/episodes`
+      ).then((res) => res.json());
+    },
+  });
+
+  useEffect(() => {
+    if (EpisodesData) {
+      const lastEpisode = EpisodesData?.data.episodes.slice(-1)[0];
+      setLatestEpId(lastEpisode.episodeId || "");
+    }
+  }, [EpisodesData]);
+
   const path = useRouter().state.location.pathname.split("/");
   return (
     <div className="w-screen h-screen">
@@ -42,7 +65,7 @@ const Anime = ({ animeName }: IProps) => {
         <BreadcrumbHeader path={path} />
       </div>
       {data && !isLoading ? (
-        <AnimeInfo animeInfo={data.data} />
+        <AnimeInfo animeInfo={data.data} lastEp= {latestEpId}/>
       ) : !data && !isLoading ? (
         <ErrorComponent error={error} />
       ) : (

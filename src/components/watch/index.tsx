@@ -2,13 +2,13 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { Navbar } from "../navbar/navbar";
 import { BreadcrumbHeader } from "../anime";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { HiAnime } from "@/types/anime";
 import { VideoPlayer } from "./_components/video-player";
 import { PlayerProvider } from "../contexts/videoPlayer";
 import { usePlayer } from "@/hooks/usePlayer";
 import { Button } from "../ui/button";
-import { ChevronLeft, ChevronRight, Mic, PlusIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Mic, PlusIcon } from "lucide-react";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
 import { Input } from "../ui/input";
@@ -264,22 +264,82 @@ const EpisodesList = ({
   episodes: HiAnime.ScrapedAnimeEpisodes["episodes"];
   activeEpisode?: string;
 }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const episodesPerPage = 10;
+  
+  const totalPages = Math.ceil(episodes.length / episodesPerPage);
+  const startIndex = (currentPage - 1) * episodesPerPage;
+  const endIndex = startIndex + episodesPerPage;
+  const currentEpisodes = episodes.slice(startIndex, endIndex);
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.min(Math.max(1, page), totalPages));
+  };
+
   return (
-    <div className="flex flex-col w-full divide-y">
-      {episodes.map((episode) => (
-        <Link
-          href={`/watch/${episode.episodeId}`}
-          key={episode.episodeId}
-          className={cn(
-            "flex items-center gap-2 p-4 cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors duration-100",
-            episode.episodeId === activeEpisode &&
-              "bg-accent text-accent-foreground"
-          )}
-        >
-          <p className="text-xs font-semibold">{episode.number}.</p>
-          <p className="text-xs">{episode.title}</p>
-        </Link>
-      ))}
+    <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full divide-y">
+        {currentEpisodes.map((episode) => (
+          <Link
+            href={`/watch/${episode.episodeId}`}
+            key={episode.episodeId}
+            className={cn(
+              "flex items-center gap-2 p-4 cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors duration-100",
+              episode.episodeId === activeEpisode &&
+                "bg-accent text-accent-foreground"
+            )}
+          >
+            <p className="text-xs font-semibold">{episode.number}.</p>
+            <p className="text-xs">{episode.title}</p>
+          </Link>
+        ))}
+      </div>
+      
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 p-2 border-t">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => goToPage(1)}
+            disabled={currentPage === 1}
+          >
+            <ChevronsLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          
+          <span className="text-xs">
+            Page {currentPage} of {totalPages}
+          </span>
+          
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => goToPage(totalPages)}
+            disabled={currentPage === totalPages}
+          >
+            <ChevronsRight className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

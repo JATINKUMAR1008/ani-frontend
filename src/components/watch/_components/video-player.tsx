@@ -2,7 +2,6 @@ import { usePlayer } from "@/hooks/usePlayer";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { VPlayer } from "./player";
-import { HiAnime } from "@/types/anime";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import "video.js/dist/video-js.css";
 import { ErrorComponent } from "@tanstack/react-router";
@@ -37,7 +36,7 @@ interface ApiResponse {
   };
 }
 export const VideoPlayer = ({ episodeId }: IProps) => {
-  const { autoNext, autoPlay, autoSkipIntro } = usePlayer();
+  const { autoPlay } = usePlayer();
 
   const { videoServer } = usePlayer();
   const divRef = useRef<HTMLDivElement>(null);

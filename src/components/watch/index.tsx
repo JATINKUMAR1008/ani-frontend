@@ -276,6 +276,16 @@ const EpisodesList = ({
     setCurrentPage(Math.min(Math.max(1, page), totalPages));
   };
 
+  useEffect(() => {
+    if (activeEpisode && episodes.length > 0) {
+      const activeIndex = episodes.findIndex(ep => ep.episodeId === activeEpisode);
+      if (activeIndex !== -1) {
+        const activePage = Math.floor(activeIndex / episodesPerPage) + 1;
+        setCurrentPage(activePage);
+      }
+    }
+  }, [activeEpisode, episodes, episodesPerPage]);
+
   return (
     <div className="flex flex-col w-full">
       <div className="flex flex-col w-full divide-y">
